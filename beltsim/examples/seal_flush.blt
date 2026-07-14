@@ -1,0 +1,47 @@
+use ../lib/parts.blt
+
+default edge mk=3 slots=6
+alias tiny lift mouth=0 mk=1 slots=1
+
+node PAY source item=one rate=270/min
+node PILL source item=zero rate=60/min limit=1 start=5
+node M merger
+node SS smartsplitter
+node K sink
+edge A PAY > M.in0
+edge B PILL > M.in1 mk=1 slots=2
+edge C M.out > SS.in slots=8
+edge D SS.out0 > K.in rule=one
+display FLOW counter K item=one
+display PILLS counter K item=zero
+display THRU meter D
+at 12 rule SS.out0 one,zero
+probe C
+
+default edge mk=2 slots=3
+
+node B1 button item=one
+node B0 button item=zero
+node KM sink
+
+inst g or2
+inst w longwire
+inst bit parkbit
+
+edge E1 B1 > g.a
+edge E0 B0 > g.b
+edge J g.q > w.i slots=2
+edge OUT w.o > KM.in slots=6
+
+node BW button item=one
+edge CELL BW > bit.w tiny
+
+display WIRE lamp OUT
+display TOTAL counter KM
+display BIT register CELL one=one zero=zero
+display INRATE meter g.a
+
+at 1 press B1 3
+at 3 press B0 3
+at 5 press BW
+at 20 rule bit/CAP.out0 any

@@ -1,0 +1,118 @@
+item 1
+item 0
+item cork
+
+def or
+    
+    node srcA   source item=0 rate=1200/min
+    node ssA    smartsplitter
+    node ssB    smartsplitter
+    node ssC    smartsplitter
+    node mA     merger
+    node pmA    pmerger
+    node trm0   sink
+    node trm1   sink
+
+    pin a       ssA.in
+    pin b       ssB.in
+    pin out     pmA.out
+
+    edge ssA0   ssA.out0 -> ssC.in mk=6 slots=5 rule=1
+    edge ssA1   ssA.out1 -> trm0 mk=6 slots=5 rule=0
+    edge ssB0   ssB.out0 -> pmA.high mk=6 slots=5 rule=1
+    edge ssB1   ssB.out1 -> mA.in0 mk=6 slots=5 rule=0
+    edge ssC0   ssC.out0 -> pmA.med mk=6 slots=5 rule=any
+    edge ssC1   ssC.out1 -> mA.in1 mk=6 slots=5 rule=overflow
+    edge mA0    mA.out -> trm1 slots=5 mk=6
+    edge srcA0  srcA.out -> pmA.low mk=6 slots=13
+
+end
+
+def and
+
+    node srcA   source item=1 rate=1200/min
+    node ssA    smartsplitter
+    node ssB    smartsplitter
+    node ssC    smartsplitter
+    node mA     merger
+    node pmA    pmerger
+    node trm0   sink
+    node trm1   sink
+
+    pin a       ssA.in
+    pin b       ssB.in
+    pin out     pmA.out
+
+    edge ssA0   ssA.out0 -> ssC.in mk=6 slots=5 rule=0
+    edge ssA1   ssA.out1 -> trm0 mk=6 slots=2  rule=1
+    edge ssB0   ssB.out0 -> pmA.high mk=6 slots=5 rule=0
+    edge ssB1   ssB.out1 -> mA.in0 mk=6 slots=2 rule=1
+    edge ssC0   ssC.out0 -> pmA.med mk=6 slots=5 rule=any
+    edge ssC1   ssC.out1 -> mA.in1 mk=6 slots=2 rule=overflow
+    edge mA0    mA.out -> trm1.in mk=6 slots=2
+    edge srcA0  srcA.out -> pmA.low mk=6 slots=13
+
+end
+    
+def xor
+
+    node srcA   source item=0 rate=1200/min
+    node srcB   source item=0 rate=1200/min
+    node ssA    smartsplitter
+    node ssB    smartsplitter
+    node ssC    smartsplitter
+    node ssD    smartsplitter
+    node pmA    pmerger
+    node pmB    pmerger 
+    node pmC    pmerger
+    node trm0   sink
+    node trm1   sink
+    node trm2   sink
+
+    pin a       ssA.in
+    pin b       ssB.in
+    pin out     pmB.out
+
+    edge ssA0   ssA.out0 -> pmA.high mk=6 slots=5 rule=1
+    edge ssA1   ssA.out1 -> trm0 mk=6 slots=2 rule=0
+    edge ssB0   ssB.out0 -> ssC.in mk=6 slots=5 rule=1
+    edge ssB1   ssB.out1 -> trm1 mk=6 slots=2 rule=0
+    edge ssC0   ssC.out0 -> pmA.low mk=6 slots=5 rule=any
+    edge ssC1   ssC.out1 -> pmC.high mk=6 slots=5 rule=overflow
+    edge pmA0   pmA.out -> pmB.med mk=6 slots=5
+    edge srcA0  srcA.out -> pmB.low mk=6 slots=23
+    edge srcB0  srcB.out -> ssD.in mk=6 slots=2
+    edge ssD0   ssD.out0 -> pmB.high mk=6 slots=5 rule=overflow
+    edge ssD1   ssD.out1 -> pmC.low mk=6 slots=5 rule=any
+    edge pmC0   pmC.out -> trm2 mk=6 slots=2
+
+end
+
+def not
+
+    node srcA source item=0 rate=1200/min
+    node srcB source item=1 rate=1200/min
+    node ssA smartsplitter
+    node ssB smartsplitter
+    node ssC smartsplitter
+    node pmA pmerger
+    node pmB pmerger
+    node mA merger
+    node trm0 sink
+    node trm1 sink
+
+    pin in      ssC.in
+    pin out     mA.out
+
+    edge srcA0  srcA.out -> ssA.in mk=6 slots=3
+    edge srcB0  srcB.out -> ssB.in mk=6 slots=3
+    edge ssC0   ssC.out0 -> pmA.high mk=6 slots=5 rule=1
+    edge ssC1   ssC.out1 -> pmB.high mk=6 slots=5 rule=0
+    edge ssA0   ssA.out0 -> pmA.low mk=6 slots=5 rule=any
+    edge ssB0   ssB.out0 -> pmB.low mk=6 slots=5 rule=any
+    edge ssA1   ssA.out1 -> mA.in0 mk=6 slots=5 rule=overflow
+    edge ssB1   ssB.out1 -> mA.in1 mk=6 slots=5 rule=overflow
+    edge pmA0   pmA.out -> trm0 mk=6 slots=2
+    edge pmB0   pmB.out -> trm1 mk=6 slots=2
+
+end

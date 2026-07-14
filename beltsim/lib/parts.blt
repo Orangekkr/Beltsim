@@ -1,0 +1,24 @@
+item one
+item zero
+item pill
+
+def or2
+node M merger
+pin a M.in0
+pin b M.in1
+pin q M.out
+end
+
+def parkbit
+default edge mk=1 slots=2
+node CAP smartsplitter
+node F sink
+edge FLUSH CAP.out0 > F.in rule=pill
+pin w CAP.in
+end
+
+def longwire
+node C container cap=50
+pin i C.in
+pin o C.out
+end

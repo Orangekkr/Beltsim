@@ -1,0 +1,11 @@
+[package]
+name = "beltsim"
+version = "0.4.0"
+edition = "2021"
+description = "Fast deterministic simulator for Satisfactory belt-logic circuits (catalog physics)"
+
+[dependencies]
+
+[profile.release]
+lto = true
+codegen-units = 1
